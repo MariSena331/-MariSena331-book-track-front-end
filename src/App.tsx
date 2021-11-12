@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { api } from './services/api'
 import { GlobalStyles } from './styles/global'
+import { MyBooks } from './components/MyBooks'
 
 function App() {
     const [books, setBooks] = useState([])
@@ -18,13 +19,7 @@ function App() {
   return (
     <>
         <GlobalStyles />
-        {
-            books && books.map((item: any) => (
-                <>
-                    <a key={item.id}>{item.title}</a><br />
-                </>
-            ))
-        }
+        <MyBooks books={books} setBooks={setBooks} />
     </>
   )
 }
