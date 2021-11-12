@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import {
     Avatar,
     Container,
@@ -10,6 +10,7 @@ import {
     makeStyles,
     Typography
 } from '@material-ui/core'
+import { NewBookForm } from './NewBookForm'
 import { Book, Delete, Add } from '@material-ui/icons'
 import { api } from '../services/api'
 
@@ -28,7 +29,24 @@ const useStyles = makeStyles((theme) => ({
 
 export const MyBooks = ({ books, setBooks }: any) => {
  const classes = useStyles()
- const [dense, setDense] = React.useState(false)
+ const [dense, setDense] = useState(false)
+ const [openCreateNewBookModal, setOpenCreateNewBookModal] = useState(false)
+ const [newBook, setNewBook] = useState({
+     title: '',
+     status: '',
+     author: ''
+ })
+
+ const handleAdd = useCallback(async() => {
+   const updatedList = await api.post("/books", {
+       data: {
+           title: newBook.title,
+           author: newBook.author,
+           status: newBook.status
+       }
+   })
+   setBooks(updatedList.data)
+ }, [books])
 
  const handleDelete = useCallback(async(id) => {
     const updatedBooks = await api.delete("/books", {
@@ -44,7 +62,7 @@ export const MyBooks = ({ books, setBooks }: any) => {
          <Grid item xs={12} md="auto">
              <Typography variant="h6" className={classes.title}>
                 Seus livros
-                 <IconButton>
+                 <IconButton onClick={() => setOpenCreateNewBookModal(true)}>
                     <Add />
                 </IconButton>
              </Typography>
@@ -69,6 +87,8 @@ export const MyBooks = ({ books, setBooks }: any) => {
                  </List>
              </div>
          </Grid>
+
+         <NewBookForm open={openCreateNewBookModal} handleClose={() => setOpenCreateNewBookModal(false)} />
     </Container>
  )
 }
