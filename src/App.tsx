@@ -1,13 +1,32 @@
-import React from 'react';
-import { GlobalStyles } from './styles/global';
+import React, { useEffect, useState, useCallback } from 'react'
+import { api } from './services/api'
+import { GlobalStyles } from './styles/global'
 
 function App() {
+    const [books, setBooks] = useState([])
+
+    const handleGetBooks = useCallback(async() => {
+        const result = await api.get("/books")
+
+        setBooks(result.data)
+    }, [books])
+
+    useEffect(() => {
+       handleGetBooks()
+    }, [])
+
   return (
     <>
         <GlobalStyles />
-      <h1>Hello World</h1>
+        {
+            books && books.map((item: any) => (
+                <>
+                    <a key={item.id}>{item.title}</a><br />
+                </>
+            ))
+        }
     </>
-  );
+  )
 }
 
 export default App;
