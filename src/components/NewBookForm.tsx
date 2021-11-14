@@ -39,11 +39,12 @@ export const NewBookForm = ({ open, handleClose }: IMyBooksProps) => {
           className={classes.root}
         >
             <Card className={classes.card}>
-                <form onSubmit={handleSubmit} className={classes.form}>
-                    <Input name="name" aria-label="Titulo" />
-                    <Input name="email" aria-label="Autor" />
+                <form onSubmit={handleSubmit} className={classes.form} autoComplete="off">
+                    <TextField name="title" label="Titulo" />
+                    <TextField name="author" label="Autor" />
+                    <TextField name="score" label="Nota" />
+                    <TextField name="concluded_at" label="Data de conclusão" />
                     <TextField
-                      id="filled-select-currency"
                       select
                       label="Status"
                       variant="filled"
