@@ -13,6 +13,7 @@ import {
 import { NewBookForm } from './NewBookForm'
 import { Book, Delete, Add } from '@material-ui/icons'
 import { api } from '../services/api'
+import { Books } from '../interfaces/Books'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,22 +32,11 @@ export const MyBooks = ({ books, setBooks }: any) => {
  const classes = useStyles()
  const [dense, setDense] = useState(false)
  const [openCreateNewBookModal, setOpenCreateNewBookModal] = useState(false)
- const [newBook, setNewBook] = useState({
+ const [newBook, setNewBook] = useState<Books>({
      title: '',
-     status: '',
+     status: 'WANT_READ',
      author: ''
  })
-
- const handleAdd = useCallback(async() => {
-   const updatedList = await api.post("/books", {
-       data: {
-           title: newBook.title,
-           author: newBook.author,
-           status: newBook.status
-       }
-   })
-   setBooks(updatedList.data)
- }, [books])
 
  const handleDelete = useCallback(async(id) => {
     const updatedBooks = await api.delete("/books", {
@@ -88,7 +78,12 @@ export const MyBooks = ({ books, setBooks }: any) => {
              </div>
          </Grid>
 
-         <NewBookForm open={openCreateNewBookModal} handleClose={() => setOpenCreateNewBookModal(false)} />
+         <NewBookForm
+             open={openCreateNewBookModal}
+             handleClose={() => setOpenCreateNewBookModal(false)}
+             books={books}
+             setBooks={setBooks}
+         />
     </Container>
  )
 }
